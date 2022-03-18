@@ -1,0 +1,76 @@
+//@version=5
+//=============================================================================================  
+//  Creator: Woverine
+//	
+//	Source Code: https://github.com/RyKaj/PineScript/tree/main
+//
+//	Purpose: 
+//		  Ichimou & Cloud
+//
+//=============================================================================================  
+
+indicator('Woverine - Ichimou & Cloud', overlay=true, shorttitle='Ichimou')
+
+
+// Plot colors
+// https://chir.ag/projects/name-that-color/#6195ED
+colorRed = #991515
+colorBlue = #0496ff
+colorGreen = #459915
+colorPurple = #800080
+colorTeal = #008080
+colorBlack = #000000
+
+
+//-------------------------------------------------------------------------------------------------------------------------
+// Ichimoku
+//-------------------------------------------------------------------------------------------------------------------------
+middleDonchian(Length) =>
+    lower = ta.lowest(Length)
+    upper = ta.highest(Length)
+    math.avg(upper, lower)
+
+conversionPeriods0 = input.int(9, minval=1)
+basePeriods0 = input.int(26, minval=1)
+laggingSpan2Periods0 = input.int(52, minval=1)
+displacement0 = input.int(26, minval=1)
+Tenkan = middleDonchian(conversionPeriods0)
+Kijun = middleDonchian(basePeriods0)
+xChikou = close
+SenkouA = middleDonchian( laggingSpan2Periods0) 
+SenkouB = ( Tenkan[ basePeriods0 ] + Kijun[ basePeriods0 ] ) / 2
+plot( Tenkan, color=color.new( color.red, transp=0), title='Tenkan' )
+plot( Kijun, color=color.new( color.blue, transp=0), title='Kijun' )
+plot( xChikou, color=color.new( color.teal, transp=0 ), title='Chikou', offset= -displacement0 )
+A = plot( SenkouA[ displacement0 ], color=color.new( color.purple, transp=0 ), title='SenkouA' )
+B = plot( SenkouB, color=color.new( color.green, transp=0), title='SenkouB')
+fill( A, B, color=color.new(color.green, 90))
+
+
+//-------------------------------------------------------------------------------------------------------------------------
+// Ichimoku Cloud
+//-------------------------------------------------------------------------------------------------------------------------
+
+conversionPeriods1 = input.int( 9, minval=1, title='Conversion Line Periods' )
+basePeriods1 = input.int( 26, minval=1, title='Base Line Periods' )
+laggingSpan2Periods1 = input.int( 52, minval=1, title='Lagging Span 2 Periods' )
+displacement1 = input.int( 26, minval=1, title='Displacement' )
+
+donchian(len) => math.avg( ta.lowest( len ), ta.highest( len ) )
+
+conversionLine = donchian( conversionPeriods1 )
+baseLine = donchian( basePeriods1 )
+leadLine1 = math.avg( conversionLine, baseLine )
+leadLine2 = donchian( laggingSpan2Periods1 )
+
+plot( conversionLine, color=color.new( colorBlue, 0 ), title='Conversion Line' )
+plot( baseLine, color=color.new( colorRed, 0 ), title='Base Line' )
+plot( close, offset=-displacement1 + 1, color=color.new( colorGreen, transp=0 ), title='Lagging Span' )
+
+p1 = plot( leadLine1, offset=displacement1 - 1, color=color.new(colorGreen, 0), title='Lead 1')
+p2  = plot( leadLine2, offset=displacement1 - 1, color=color.new(colorRed, 0), title='Lead 2')
+fill( p1, p2, color=leadLine1 > leadLine2 ? color.new( colorGreen, transp=90) : color.new(colorRed, transp=90 ) )
+
+
+
+
