@@ -103,7 +103,7 @@ plot(ta.crossover(sma50, sma200) ? sma200 : na, title='Death Cross', style=plot.
 // Trend color ema 
 // ema trend direction trigger For Singals 1 & 2
 //--------------------------------------------------------------------------------
-smaplot = input(false, title='Show SMA on chart')
+smaplot = input(true, title='Show SMA on chart')
 out2 = ta.sma(close, input.int(8, minval=1, title='sma Length'))
 mycolor2 = out2 > out2[1] ? colorJungleGreen : out2 < out2[1] ? colorRed : colorBlue
 plot(out2 and smaplot ? out2 : na, title='SMA Trend', color=mycolor2, linewidth=1)
