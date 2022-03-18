@@ -1,4 +1,18 @@
-study(title="Wonverine - Lines", shorttitle="MA", overlay=true)
+//=============================================================================================  
+//  Creator: Woverine
+//	
+//	Purpose: 
+//		Ability to toggle and customize colour display 
+//			- SMA 20, 50, 100, 200, 500
+//			- ESMA 20, 50, 100, 200, 500
+//			- Golden Cross (SMA 50 & 200 )
+//			- Death Cross (SMA 50 & 200 )
+//			- SMA Trendline
+//			- EMA Trendline
+//
+//=============================================================================================  
+
+study(title="Wonverine - Moving Lines", shorttitle="MA", overlay=true)
 
 //@version=4
 
@@ -37,7 +51,6 @@ colorCoral = #FF7F50
 colorGoldenCross = #61ed77
 colorDeathCross = #e32636
 
-// Days
 days20 = 20
 days50 = 50
 days100 = 100
@@ -60,49 +73,50 @@ ema200 = ema( close, days200 )
 ema500 = ema( close, days500 )
 
 
+plot( sma20, color=colorCyan, title="SMA(20)" )  //color.new( colorCyan, transp = 0)
+plot( sma50, color=colorRobinEggBlue, title="SMA(50)" )
+plot( sma100, color=colorBlueChill, title="SMA(100)" )
+plot( sma200, color=colorTealBlue, title="SMA(200)" )
+plot( sma500, color=colorCandelLight, title="SMA(500)" )
 
-
-plot( sma20, color=color.new( colorCyan, transp = 0), title="SMA(20)" )
-plot( sma50, color=color.new( colorRobinEggBlue, transp = 0), title="SMA(50)" )
-plot( sma100, color=color.new( colorBlueChill, transp = 0), title="SMA(100)" )
-plot( sma200, color=color.new( colorTealBlue, transp = 0), title="SMA(200)" )
-plot( sma500, color=color.new( colorCandelLight, transp = 0), title="SMA(500)" )
-
-plot( ema20, color=color.new( colorStarship, transp = 0), title="EMA20" )
-plot( ema50, color=color.new( colorKeyLimePie, transp = 0), title="EMA50" )
-plot( ema100, color=color.new( colorTrendyGreen, transp = 0), title="EMA100" )
-plot( ema200, color=color.new( colorSaratoga, transp = 0), title="EMA200" )
-plot( ema500, color=color.new( colorCoral, transp = 0), title="EMA500" )
+plot( ema20, color=colorStarship, title="EMA20" )
+plot( ema50, color=colorKeyLimePie, title="EMA50" )
+plot( ema100, color=colorTrendyGreen, title="EMA100" )
+plot( ema200, color=colorSaratoga, title="EMA200" )
+plot( ema500, color=colorCoral, title="EMA500" )
 
 
 //--------------------------------------------------------------------------------
 // Golden Cross
 //--------------------------------------------------------------------------------
-plot( crossover( sma50, sma200 ) ? sma200 : na, title="Golden Cross", style=plot.style_cross, color=color.new( colorGoldenCross, transp = 0), linewidth=5)
+plot( crossover( sma50, sma200 ) ? sma200 : na, title="Golden Cross", style=plot.style_cross, color= color.new( colorGoldenCross, transp = 0), linewidth=5)
 
 //--------------------------------------------------------------------------------
 // Death Cross
 //--------------------------------------------------------------------------------
-plot( crossover( sma50, sma200 ) ? sma200 : na, title="Death Cross", style=plot.style_cross, color=color.new( colorDeathCross, transp = 0), linewidth=5)
+plot( crossover( sma50, sma200 ) ? sma200 : na, title="Death Cross", style=plot.style_cross, color= color.new( colorDeathCross, transp = 0), linewidth=5)
 
 
 //--------------------------------------------------------------------------------
 // Trend color SMA 
 // SMA trend direction trigger For Singals 1 & 2
+// Trend color ema 
+// ema trend direction trigger For Singals 1 & 2
 //--------------------------------------------------------------------------------
-smaplot = input (false, title="Show SMA on chart")
-out2 = sma(close, input(8, minval=1, title="sma Length"))
+smaplot = input (true, title="Show SMA on chart")
+out2 = sma( close, input(8, minval=1, title="SMA Length") )
 mycolor2 = out2 > out2[1] ? colorJungleGreen : out2 < out2[1] ? colorRed : colorBlue
-plot(out2 and smaplot ? out2 :na , title="SMA Trend", color=color.new( mycolor2, transp = 0), linewidth=1)
+plot( out2 and smaplot ? out2 :na , title="SMA Trend", color=color.new( mycolor2, transp = 0 ), linewidth=1 )
+plot( out2 and smaplot ? out2 :na , title="SMA Trend", color=mycolor2, linewidth=1 )
 
 
 //--------------------------------------------------------------------------------
 // Trend color EMA 
 // EMA trend direction trigger For Singals 1 & 2
 //--------------------------------------------------------------------------------
-emaplot = input (true, title="Show EMA on chart")
-emaout = ema(close, input(8, minval=1, title="ema Length"))
+emaplot = input ( true, title="Show EMA on chart" )
+emaout = ema( close, input(8, minval=1, title="EMA Length") )
 mycolor = emaout > emaout[1] ? colorJungleGreen : emaout < emaout[1] ? colorRed : colorBlue
-plot(emaout and emaplot ? emaout :na, title="EMA Trend", color=color.new( mycolor, transp = 0), linewidth=3)
- 
+plot( emaout and emaplot ? emaout :na, title="EMA Trend", color=color.new( mycolor, transp = 0), linewidth=3 )
+plot( emaout and emaplot ? emaout :na, title="EMA Trend", color=mycolor, linewidth=3 )
 
