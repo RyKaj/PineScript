@@ -1,3 +1,4 @@
+//@version=5
 //=============================================================================================  
 //  Creator: Woverine
 //	
@@ -16,7 +17,6 @@
 
 indicator(title='Wonverine - Lines', shorttitle='MA', overlay=true)
 
-//@version=5
 
 // Plot colors
 // https://chir.ag/projects/name-that-color/#6195ED
