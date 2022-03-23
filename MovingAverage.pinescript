@@ -20,98 +20,105 @@ indicator(title='Wonverine - Lines', shorttitle='MA', overlay=true)
 
 // Plot colors
 // https://chir.ag/projects/name-that-color/#6195ED
-colorAquaIsland = #B2DFDB
-colorAzureRadiance = #0094ff
-colorBlack = #000000
-colorBlazeOrange = #ff6a00
-colorBlue = #0000FF
-colorBlueChill = #088A8D
-colorBlushPink = #fd7fe6
-colorBurntSienna = #EF5350
-colorCyan = #17FFFF
-colorFreshEggplant = #800080
-colorJapaneseLaurel = #008000
-colorJungleGreen = #39ff14
-colorKeyLimePie = #BCBB26
-colorLilacBush = #9575cd
-colorParsley = #0E4813
-colorPastelPink = #FFCDD2
-colorRed = #FF0000
-colorRobinEggBlue = #00C9C9
-colorRusticRed = #4E0404
-colorSaratoga = #505010
-colorStarship = #F2F131
-colorSpringGreen = #00E676
-colorTamarillo = #991515
-colorTeal = #008080
-colorTealBlue = #055355
-colorTrendyGreen = #86851b
-colorWhite = #FFFFFF
-colorYellow = #ffff00
-colorCandelLight = #FCD917
-colorCoral = #FF7F50
-colorGoldenCross = #61ed77
-colorDeathCross = #e32636
+// https://kodify.net/tradingview/colours/basic-colours/
+// color colorAquaIsland = #B2DFDB
+// color colorAzureRadiance = #0094ff
+// color colorBlack = #363A45
+color colorBlazeOrange = #ff6a00
+color colorBlue = #2196F3
+color colorBlueChill = #088A8D
+// color colorBlushPink = #fd7fe6
+// color colorBurntSienna = #EF5350
+// color colorCandelLight = #FCD917
+color colorCoral = #FF7F50
+// color colorCyan = #17FFFF
+color colorDeathCross = #e32636
+// color colorFreshEggplant = #800080
+color colorFruitSalad = #4CAF50
+color colorGoldenCross = #61ed77
+// color colorJapaneseLaurel = #008000
+// color colorGreen = #4CAF50
+color colorJungleGreen = #39ff14
+// color colorKeyLimePie = #BCBB26
+color colorLilacBush = #9575cd
+// color colorParsley = #0E4813
+// color colorPastelPink = #FFCDD2
+// color colorPurple = #9C27B0
+color colorRed = #FF5252
+// color colorRobinEggBlue = #00C9C9
+color colorRoseBudCherry = #880e4f
+// color colorRusticRed = #4E0404
+color colorSaratoga = #505010
+// color colorSpringGreen = #00E676
+// color colorStarship = #F2F131
+// color colorTamarillo = #991515
+// color colorTeal = #00897B
+// color colorTealBlue = #055355
+// color colorTrendyGreen = #86851b
+// color colorWhite = #FFFFFF
+color colorYellow = #ffff00
 
-days20 = 20
-days50 = 50
-days100 = 100
-days200 = 200
-days500 = 500
+// Durations
+int days20 = 20
+int days50 = 50
+int days100 = 100
+int days200 = 200
+int days500 = 500
 
 // Simple Moving Average
-sma20 = ta.sma(close, days20)
-sma50 = ta.sma(close, days50)
-sma100 = ta.sma(close, days100)
-sma200 = ta.sma(close, days200)
-sma500 = ta.sma(close, days500)
-
+float sma20 = ta.sma( close, days20 )
+float sma50 = ta.sma( close, days50 )
+float sma100 = ta.sma( close, days100 )
+float sma200 = ta.sma( close, days200 )
+float sma500 = ta.sma( close, days500 )
 
 // Expodental Moving Average
-ema20 = ta.ema(close, days20)
-ema50 = ta.ema(close, days50)
-ema100 = ta.ema(close, days100)
-ema200 = ta.ema(close, days200)
-ema500 = ta.ema(close, days500)
+float ema20 = ta.ema( close, days20 )
+float ema50 = ta.ema( close, days50 )
+float ema100 = ta.ema( close, days100 )
+float ema200 = ta.ema( close, days200 )
+float ema500 = ta.ema( close, days500 )
 
 
-plot(sma20, color=color.new(colorCyan, 0), title='SMA(20)')
-plot(sma50, color=color.new(colorRobinEggBlue, 0), title='SMA(50)')
-plot(sma100, color=color.new(colorBlueChill, 0), title='SMA(100)')
-plot(sma200, color=color.new(colorTealBlue, 0), title='SMA(200)')
-plot(sma500, color=color.new(colorCandelLight, 0), title='SMA(500)')
+plot( sma20, color=color.new( colorFruitSalad, transp=0 ), title='SMA(20)' )
+plot( sma50, color=color.new( colorYellow, transp=0 ), title='SMA(50)' )
+plot( sma100, color=color.new( colorBlueChill, transp=0 ), title='SMA(100)' )
+plot( sma200, color=color.new( colorRed, transp=0 ), title='SMA(200)' )
+plot( sma500, color=color.new( colorRoseBudCherry, transp=0 ), title='SMA(500)' )
 
-plot(ema20, color=color.new(colorStarship, 0), title='EMA20')
-plot(ema50, color=color.new(colorKeyLimePie, 0), title='EMA50')
-plot(ema100, color=color.new(colorTrendyGreen, 0), title='EMA100')
-plot(ema200, color=color.new(colorSaratoga, 0), title='EMA200')
-plot(ema500, color=color.new(colorCoral, 0), title='EMA500')
+plot( ema20, color=color.new( colorBlueChill, transp=0 ), title='EMA20' )
+plot( ema50, color=color.new( colorBlazeOrange, transp=0 ), title='EMA50' )
+plot( ema100, color=color.new( colorLilacBush, transp=0 ), title='EMA100' )
+plot( ema200, color=color.new( colorSaratoga, transp=0 ), title='EMA200' )
+plot( ema500, color=color.new( colorCoral, transp=0 ), title='EMA500' )
 
 
 //--------------------------------------------------------------------------------
 // Golden Cross
 //--------------------------------------------------------------------------------
-plot(ta.crossover(sma50, sma200) ? sma200 : na, title='Golden Cross', style=plot.style_cross, color=color.new(colorGoldenCross, transp=0), linewidth=5)
+plot( ta.crossover( sma50, sma200 ) ? sma200 : na, title='SMA Golden Cross', style=plot.style_cross, color=color.new( colorGoldenCross, transp=0 ), linewidth=5 )
+plot( ta.crossover( ema50, ema200 ) ? ema200 : na, title='EMA Golden Cross', style=plot.style_cross, color=color.new( colorGoldenCross, transp=0 ), linewidth=5 )
 
 //--------------------------------------------------------------------------------
 // Death Cross
 //--------------------------------------------------------------------------------
-plot(ta.crossover(sma50, sma200) ? sma200 : na, title='Death Cross', style=plot.style_cross, color=color.new(colorDeathCross, transp=0), linewidth=5)
-
+plot( ta.crossover( sma200, sma50 ) ? sma50 : na, title='SMA Death Cross', style=plot.style_cross, color=color.new( colorDeathCross, transp=0 ), linewidth=5 )
+plot( ta.crossover( ema200, ema50 ) ? ema50 : na, title='EMA Death Cross', style=plot.style_cross, color=color.new( colorDeathCross, transp=0 ), linewidth=5 )
 
 //--------------------------------------------------------------------------------
 // Trend color ema 
 // ema trend direction trigger For Singals 1 & 2
 //--------------------------------------------------------------------------------
-smaplot = input(true, title='Show SMA on chart')
-out2 = ta.sma(close, input.int(8, minval=1, title='sma Length'))
-mycolor2 = out2 > out2[1] ? colorJungleGreen : out2 < out2[1] ? colorRed : colorBlue
-plot(out2 and smaplot ? out2 : na, title='SMA Trend', color=mycolor2, linewidth=1)
+var smaPlot = input( true, title='Show SMA on chart' )
+float smaLength = ta.sma( close, input.int( 8, minval=1, title='SMA Length' ) )
+color smaColor = smaLength > smaLength[1] ? colorJungleGreen : smaLength < smaLength[1] ? colorRed : colorBlue
+plot( smaLength and smaPlot ? smaLength : na, title='SMA Trend', color=smaColor, linewidth=1 )
 
-emaplot = input(true, title='Show EMA on chart')
-emaout = ta.ema(close, input.int(8, minval=1, title='ema Length'))
-mycolor = emaout > emaout[1] ? colorJungleGreen : emaout < emaout[1] ? colorRed : colorBlue
-plot(emaout and emaplot ? emaout : na, title='EMA Trend', color=mycolor, linewidth=3)
+var emaPlot = input( true, title='Show EMA on chart' )
+float emaLength = ta.ema( close, input.int(8, minval=1, title='EMA Length' ) )
+color emaColor = emaLength > emaLength[1] ? colorJungleGreen : emaLength < emaLength[1] ? colorRed : colorBlue
+plot( emaLength and emaPlot ? emaLength : na, title='EMA Trend', color=emaColor, linewidth=1 )
+
 
 
 
