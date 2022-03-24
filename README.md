@@ -26,33 +26,28 @@ Created custom scripts to have more options or have multiple indicator applied a
   
 
 <a  name="bsl"  />
-
 ### Buy Sell Labels
 
   
 
 <a  name="ic"  />
-
 ### Ichimou & Cloud
 
   
 
-<a  name="na"  />
-
+<a  name="ma"  />
 ### Moving Average
-Ability to toggle different SMA & EMA length and Trend, Golden Cross, Death Cross
-
-<kbd>![](image/451822826/MA Input.PNG)</kbd>
-<kbd>![](image/451822826/MA Style 1.PNG</kbd>
-<kbd>![](image/451822826/MA Style 2.PNG)</kbd>
+Ability to toggle different SMA & EMA length and Trend, Golden Cross, Death Cross. Able to configure colour schematics 
+<kbd>![](image/451822826/MAInput.PNG)</kbd>
+<kbd>![](image/451822826/MAStyle1.PNG</kbd>
+<kbd>![](image/451822826/MAStyle2.PNG)</kbd>
   
 
 <a  name="sr"  />
-
 ### Support & Resistance
-
-  
+Ability to toggle different Support, Resistance, Directional Projection & Trend. Able to configure colour schematics.
+<kbd>![](image/451822826/SRInput.PNG)</kbd>
+<kbd>![](image/451822826/SRStyle.PNG</kbd>
 
 <a  name="vp"  />
-
 ### Volume Profile
