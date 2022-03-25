@@ -34,13 +34,16 @@ Created custom scripts to have more options or have multiple indicator applied a
 <a  name="ic"  />
 
 ### Ichimou & Cloud
-
-  
+- Ability to toggle Ichimou and Ichimou Cloud
+- Ability to configure colour schematics
+- Ability to configure indicators
+- Ability to configure style
 
 <a  name="ma"  />
 
 ### Moving Average
-Ability to toggle different SMA & EMA length and Trend, Golden Cross, Death Cross. Able to configure colour schematics 
+- Ability to toggle different SMA & EMA length and Trend, Golden Cross, Death Cross. 
+- Ability to configure colour schematics 
 <kbd>![](image/MAInput.PNG)</kbd><br />
 <kbd>![](image/MAStyle1.PNG)</kbd><br />
 <kbd>![](image/MAStyle2.PNG)</kbd><br />
@@ -49,7 +52,8 @@ Ability to toggle different SMA & EMA length and Trend, Golden Cross, Death Cros
 <a  name="sr"  />
 
 ### Support & Resistance
-Ability to toggle different Support, Resistance, Directional Projection & Trend. Able to configure colour schematics.
+- Ability to toggle different Support, Resistance, Directional Projection & Trend. 
+- Ability to configure colour schematics.
 <kbd>![](image/SRInput.PNG)</kbd><br />
 <kbd>![](image/SRStyle.PNG)</kbd><br />
 
