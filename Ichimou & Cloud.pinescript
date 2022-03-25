@@ -14,63 +14,134 @@ indicator('Woverine - Ichimou & Cloud', overlay=true, shorttitle='Ichimou')
 
 // Plot colors
 // https://chir.ag/projects/name-that-color/#6195ED
-colorRed = #991515
-colorBlue = #0496ff
-colorGreen = #459915
-colorPurple = #800080
-colorTeal = #008080
-colorBlack = #000000
+// https://kodify.net/tradingview/colours/basic-colours/
+color colorRed = #FF5252
+color colorBlue = #2196F3
+color colorGreen = #4CAF50
+color colorPurple = #9C27B0
+color colorTeal = #00897B
+color colorBlack = #363A45
 
+
+color colorTemp = colorBlack      // used only to handle differnet logical conditions
+int intTransp = 0
+
+
+
+
+
+//-------------------------------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------------------------------
+middleDonchian( Length ) =>
+    lower = ta.lowest( Length )
+    upper = ta.highest( Length )
+    math.avg( upper, lower ) 
+
+donchian(len) => 
+    math.avg( ta.lowest( len ), ta.highest( len ) )
 
 //-------------------------------------------------------------------------------------------------------------------------
 // Ichimoku
 //-------------------------------------------------------------------------------------------------------------------------
-middleDonchian(Length) =>
-    lower = ta.lowest(Length)
-    upper = ta.highest(Length)
-    math.avg(upper, lower)
+bool bShowIchimoku = input.bool( defval=true, title='Show Ichimoku' )
+color colorTenkan = input.color( defval = colorRed , title = "Tenkan", tooltip = "", inline = " ", group = "Ichimoku" , confirm = false ) 
+color colorKijun = input.color( defval = colorBlue , title = "Kijun", tooltip = "", inline = " ", group = "Ichimoku" , confirm = false ) 
+color colorChikou = input.color( defval = colorTeal , title = "Chikou", tooltip = "", inline = " ", group = "Ichimoku" , confirm = false ) 
+color colorSenkouA = input.color( defval = colorPurple , title = "SenkouA", tooltip = "", inline = " ", group = "Ichimoku" , confirm = false ) 
+color colorSenkouB = input.color( defval = colorGreen , title = "SenkouB", tooltip = "", inline = " ", group = "Ichimoku" , confirm = false ) 
 
-conversionPeriods0 = input.int(9, minval=1)
-basePeriods0 = input.int(26, minval=1)
-laggingSpan2Periods0 = input.int(52, minval=1)
-displacement0 = input.int(26, minval=1)
-Tenkan = middleDonchian(conversionPeriods0)
-Kijun = middleDonchian(basePeriods0)
-xChikou = close
-SenkouA = middleDonchian( laggingSpan2Periods0) 
-SenkouB = ( Tenkan[ basePeriods0 ] + Kijun[ basePeriods0 ] ) / 2
-plot( Tenkan, color=color.new( color.red, transp=0), title='Tenkan' )
-plot( Kijun, color=color.new( color.blue, transp=0), title='Kijun' )
-plot( xChikou, color=color.new( color.teal, transp=0 ), title='Chikou', offset= -displacement0 )
-A = plot( SenkouA[ displacement0 ], color=color.new( color.purple, transp=0 ), title='SenkouA' )
-B = plot( SenkouB, color=color.new( color.green, transp=0), title='SenkouB')
-fill( A, B, color=color.new(color.green, 90))
+int ConversionPeriods = input.int( defval=9, minval=1, title='Conversion Periods' )
+int basePeriods = input.int( defval=26, minval=1, title='Base Periods'  )
+int laggingSpan2Periods = input.int( defval=52, minval=1, title='Lagging Span 2 Periods' )
+int displacement = input.int( defval=26, minval=1, title='Displacement' )
+float Tenkan = middleDonchian( ConversionPeriods )
+float Kijun = middleDonchian( basePeriods )
+float SenkouA = middleDonchian( laggingSpan2Periods ) 
+float SenkouB = ( Tenkan[ basePeriods ] + Kijun[ basePeriods ] ) / 2
+// plot( series=Tenkan, color=color.new( colorRed, transp=0 ), title='Tenkan' )
+// plot( series=Kijun, color=color.new( colorBlue, transp=0 ), title='Kijun' )
+// plot( series=close, color=color.new( colorTeal, transp=0 ), title='Chikou', offset= -displacement )
+// A = plot( series=SenkouA[ displacement ], color=color.new( colorPurple, transp=0 ), title='SenkouA' )
+// B = plot( series=SenkouB, color=color.new( colorGreen, transp=0 ), title='SenkouB' )
+// fill( A, B, color=color.new( colorGreen, 90 ) )
+
+
+colorTemp := (bShowIchimoku) ? colorTenkan : colorBlack
+intTransp := (bShowIchimoku) ? 0 : 100
+plot( Tenkan, color=color.new( colorTemp, transp=intTransp ), title='Tenkan' )
+
+colorTemp := (bShowIchimoku) ? colorKijun : colorBlack
+intTransp := (bShowIchimoku) ? 0 : 100
+plot( Kijun, color=color.new( colorTemp, transp=intTransp ), title='Kijun' )
+ 
+colorTemp := (bShowIchimoku) ? colorChikou: colorBlack
+intTransp := (bShowIchimoku) ? 0 : 100
+plot( close, color=color.new( colorTemp, transp=intTransp ), title='Chikou', offset= -displacement )
+
+colorTemp := (bShowIchimoku) ? colorSenkouA: colorBlack
+intTransp := (bShowIchimoku) ? 0 : 100
+A = plot( SenkouA[ displacement ], color=color.new( colorTemp, transp=intTransp ), title='SenkouA' )
+ 
+colorTemp := (bShowIchimoku) ? colorSenkouB: colorBlack
+intTransp := (bShowIchimoku) ? 0 : 100
+B = plot( SenkouB, color=color.new( colorTemp, transp=intTransp ), title='SenkouB' )
+
+colorTemp := (bShowIchimoku) ? colorGreen: colorBlack
+intTransp := (bShowIchimoku) ? 0 : 90
+fill( A, B, color=color.new( colorTemp, intTransp ) )
+
 
 
 //-------------------------------------------------------------------------------------------------------------------------
 // Ichimoku Cloud
 //-------------------------------------------------------------------------------------------------------------------------
-
-conversionPeriods1 = input.int( 9, minval=1, title='Conversion Line Periods' )
-basePeriods1 = input.int( 26, minval=1, title='Base Line Periods' )
-laggingSpan2Periods1 = input.int( 52, minval=1, title='Lagging Span 2 Periods' )
-displacement1 = input.int( 26, minval=1, title='Displacement' )
-
-donchian(len) => math.avg( ta.lowest( len ), ta.highest( len ) )
-
-conversionLine = donchian( conversionPeriods1 )
-baseLine = donchian( basePeriods1 )
-leadLine1 = math.avg( conversionLine, baseLine )
-leadLine2 = donchian( laggingSpan2Periods1 )
-
-plot( conversionLine, color=color.new( colorBlue, 0 ), title='Conversion Line' )
-plot( baseLine, color=color.new( colorRed, 0 ), title='Base Line' )
-plot( close, offset=-displacement1 + 1, color=color.new( colorGreen, transp=0 ), title='Lagging Span' )
-
-p1 = plot( leadLine1, offset=displacement1 - 1, color=color.new(colorGreen, 0), title='Lead 1')
-p2  = plot( leadLine2, offset=displacement1 - 1, color=color.new(colorRed, 0), title='Lead 2')
-fill( p1, p2, color=leadLine1 > leadLine2 ? color.new( colorGreen, transp=90) : color.new(colorRed, transp=90 ) )
+bool bShowIchimokuCloud = input.bool( defval=false, title='Show Ichimoku Cloud' )
+color colorConversionLine = input.color( defval = colorBlue , title = "Conversion Line", tooltip = "", inline = " ", group = "Ichimoku Cloud" , confirm = false ) 
+color colorBaseLine = input.color( defval = colorRed , title = "Base Line", tooltip = "", inline = " ", group = "Ichimoku Cloud" , confirm = false ) 
+color colorLaggingSpan = input.color( defval = colorGreen , title = "Lagging Span", tooltip = "", inline = " ", group = "Ichimoku Cloud" , confirm = false ) 
+color colorLead1 = input.color( defval = colorGreen , title = "Lead 1", tooltip = "", inline = " ", group = "Ichimoku Cloud" , confirm = false ) 
+color colorLead2 = input.color( defval = colorRed , title = "Lead 2", tooltip = "", inline = " ", group = "Ichimoku Cloud" , confirm = false ) 
 
 
+int conversionPeriods1 = input.int( defval=9, minval=1, title='Conversion Line Periods' )
+int basePeriods1 = input.int( defval=26, minval=1, title='Base Line Periods' )
+int laggingSpan2Periods1 = input.int( defval=52, minval=1, title='Lagging Span 2 Periods' )
+int displacement1 = input.int( defval=26, minval=1, title='Displacement' )
 
+float conversionLine = donchian( conversionPeriods1 )
+float baseLine = donchian( basePeriods1 )
+float leadLine1 = math.avg( conversionLine, baseLine )
+float leadLine2 = donchian( laggingSpan2Periods1 )
+
+// plot( series=conversionLine, color=color.new( colorBlue, 0 ), title='Conversion Line' )
+// plot( series=baseLine, color=color.new( colorRed, 0 ), title='Base Line' )
+// plot( series=close, offset=-displacement1 + 1, color=color.new( colorGreen, transp=0 ), title='Lagging Span' )
+// p1 = plot( series=leadLine1, offset=displacement1 - 1, color=color.new( colorGreen, 0 ), title='Lead 1')
+// p2 = plot( series=leadLine2, offset=displacement1 - 1, color=color.new( colorRed, 0 ), title='Lead 2')
+// fill( p1, p2, color=leadLine1 > leadLine2 ? color.new( colorGreen, transp=90 ) : color.new( colorRed, transp=90 ) )
+
+colorTemp := (bShowIchimokuCloud) ? colorConversionLine : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+plot( conversionLine, color=color.new( colorTemp, intTransp ), title='Conversion Line' )
+
+colorTemp := (bShowIchimokuCloud) ? colorBaseLine : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+plot( baseLine, color=color.new( colorTemp, intTransp ), title='Base Line' )
+
+colorTemp := (bShowIchimokuCloud) ? colorLaggingSpan : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+plot( close, offset=-displacement1 + 1, color=color.new( colorTemp, transp=intTransp ), title='Lagging Span' )
+
+colorTemp := (bShowIchimokuCloud) ? colorLead1 : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+p1 = plot( leadLine1, offset=displacement1 - 1, color=color.new( colorGreen, intTransp ), title='Lead 1')
+
+colorTemp := (bShowIchimokuCloud) ? colorLead2 : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+p2 = plot( leadLine2, offset=displacement1 - 1, color=color.new( colorTemp, intTransp ), title='Lead 2' )
+
+colorTemp := (bShowIchimokuCloud) ? (leadLine1 > leadLine2) ? colorGreen: colorRed : colorBlack
+intTransp := (bShowIchimokuCloud) ? 0 : 100
+fill( p1, p2, color=color.new( colorTemp, transp=intTransp ) )
 
