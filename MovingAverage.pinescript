@@ -94,15 +94,19 @@ plot( ema500, color=color.new( colorCoral, transp=0 ), title='EMA500' )
 
 
 //--------------------------------------------------------------------------------
-// Golden Cross
+// SMA  Cross
 //--------------------------------------------------------------------------------
+// Golden Cross
 plot( ta.crossover( sma50, sma200 ) ? sma200 : na, title='SMA Golden Cross', style=plot.style_cross, color=color.new( colorGoldenCross, transp=0 ), linewidth=5 )
-plot( ta.crossover( ema50, ema200 ) ? ema200 : na, title='EMA Golden Cross', style=plot.style_cross, color=color.new( colorGoldenCross, transp=0 ), linewidth=5 )
+// Death Cross
+plot( ta.crossover( sma200, sma50 ) ? sma50 : na, title='SMA Death Cross', style=plot.style_cross, color=color.new( colorDeathCross, transp=0 ), linewidth=5 )
 
 //--------------------------------------------------------------------------------
-// Death Cross
+// EMA Death Cross
 //--------------------------------------------------------------------------------
-plot( ta.crossover( sma200, sma50 ) ? sma50 : na, title='SMA Death Cross', style=plot.style_cross, color=color.new( colorDeathCross, transp=0 ), linewidth=5 )
+// Golden Cross
+plot( ta.crossover( ema50, ema200 ) ? ema200 : na, title='EMA Golden Cross', style=plot.style_cross, color=color.new( colorGoldenCross, transp=0 ), linewidth=5 )
+// Death Cross
 plot( ta.crossover( ema200, ema50 ) ? ema50 : na, title='EMA Death Cross', style=plot.style_cross, color=color.new( colorDeathCross, transp=0 ), linewidth=5 )
 
 //--------------------------------------------------------------------------------
