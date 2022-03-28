@@ -62,3 +62,7 @@ Created custom scripts to have more options or have multiple indicator applied a
 <a  name="vp"  />
 
 ### Volume Profile
+- Ability to toggle different Support, Resistance, Directional Projection & Trend. 
+- Ability to configure colour schematics.<br />
+<kbd>![](image/VPInput.PNG)</kbd><br />
+<kbd>![](image/VPStyle.PNG)</kbd><br />
