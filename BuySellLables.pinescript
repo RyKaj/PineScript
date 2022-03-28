@@ -9,97 +9,133 @@
 //
 //=============================================================================================  
 
-indicator("Woverine - Buy Sell Indicators", overlay=true, shorttitle="v1")
+indicator('Woverine - Buy Sell Indicators', overlay=true, shorttitle='BuySell')
 
 
 // Plot colors
 // https://chir.ag/projects/name-that-color/#6195ED
-colorRed = #FF0000
-colorBlue = #0000FF
-colorGreen = #008000
-colorPurple = #800080
-colorTeal = #008080
-colorBlack = #000000
+// https://kodify.net/tradingview/colours/basic-colours/
+// color colorAquaIsland = #B2DFDB
+// color colorAzureRadiance = #0094ff
+color colorBlack = #363A45
+// color colorBlazeOrange = #ff6a00
+color colorBlue = #2196F3
+// color colorBlueChill = #088A8D
+// color colorBlushPink = #fd7fe6
+// color colorBurntSienna = #EF5350
+// color colorCandelLight = #FCD917
+// color colorCoral = #FF7F50
+// color colorCyan = #17FFFF
+// color colorDeathCross = #e32636
+// color colorFreshEggplant = #800080
+// color colorFruitSalad = #4CAF50
+// color colorGoldenCross = #61ed77
+// color colorGray = #787B86
+// color colorJapaneseLaurel = #008000
+color colorGreen = #4CAF50
+// color colorJungleGreen = #39ff14
+// color colorKeyLimePie = #BCBB26
+// color colorLilacBush = #9575cd
+color colorLime = #00E676
+// color colorOrange = #FF9800
+// color colorParsley = #0E4813
+// color colorPastelPink = #FFCDD2
+color colorPurple = #9C27B0
+color colorRed = #FF5252
+// color colorRobinEggBlue = #00C9C9
+// color colorRoseBudCherry = #880e4f
+// color colorRusticRed = #4E0404
+// color colorSaratoga = #505010
+// color colorSpringGreen = #00E676
+// color colorStarship = #F2F131
+// color colorTamarillo = #991515
+color colorTeal = #00897B
+// color colorTealBlue = #055355
+// color colorTrendyGreen = #86851b
+// color colorWhite = #FFFFFF
 
 
-//#########################################################################################################################
-// ## Source From: Vdub Binary Options SniperVX v1
-// ## Author: millangoda.millangodafruits143
-//-------------------------------------------------------------------------------------------------------------------------
-// ╭╮╱╱╭╮╭╮╱╱╭╮
-// ┃╰╮╭╯┃┃┃╱╱┃┃
-// ╰╮┃┃╭┻╯┣╮╭┫╰━┳╮╭┳━━╮
-// ╱┃╰╯┃╭╮┃┃┃┃╭╮┃┃┃┃━━┫
-// ╱╰╮╭┫╰╯┃╰╯┃╰╯┃╰╯┣━━┃
-// ╱╱╰╯╰━━┻━━┻━━┻━━┻━━╯
-// ╭━━━┳╮╱╱╱╱╱╱╱╭╮
-// ┃╭━╮┃┃╱╱╱╱╱╱╱┃┃
-// ┃┃╱╰┫╰━┳━━┳━╮╭━╮╭━━┫┃
-// ┃┃╱╭┫╭╮┃╭╮┃╭╮┫╭╮┫┃━┫┃
-// ┃╰━╯┃┃┃┃╭╮┃┃┃┃┃┃┃┃━┫╰╮
-// ╰━━━┻╯╰┻╯╰┻╯╰┻╯╰┻━━┻━╯
-// ━╯
-// Vdub Binary Options SnipperVX v1 / Vdub Rejection Spike v3 intergration -
-// Signal generator for Binary Options / ©Vdubus http://www.vdubus.co.uk/
-// 
-// ====================channel======================
-len = input.int(8, minval=1)
-src = input(close, title='Source')
-out = ta.sma(src, len)
-last8h = ta.highest(close, 13)
-lastl8 = ta.lowest(close, 13)
-bearish = ta.cross(close, out) == 1 and close[1] > close
-bullish = ta.cross(close, out) == 1 and close[1] < close
-channel2 = input(false, title='Bar Channel On/Off')
-ul2 = plot(channel2 ? last8h : last8h == nz(last8h[1]) ? last8h : na, color=color.new(colorBlack, transp=0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level top', offset=0)
-ll2 = plot(channel2 ? lastl8 : lastl8 == nz(lastl8[1]) ? lastl8 : na, color=color.new(colorBlack, transp=0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level bottom', offset=0)
 
-//--Modified vyacheslav.shindin-------------------------------------------------//           Signal 1
-//Configured ema signal output
+//Configured signal output
 slow = 8
 fast = 5
-vh1 = ta.ema(ta.highest(math.avg(low, close), fast), 5)
-vl1 = ta.ema(ta.lowest(math.avg(high, close), slow), 8)
+
+
 //
-e_ema1 = ta.ema(close, 1)
-e_ema2 = ta.ema(e_ema1, 1)
-e_ema3 = ta.ema(e_ema2, 1)
-tema = 1 * (e_ema1 - e_ema2) + e_ema3
-//
-e_e1 = ta.ema(close, 8)
-e_e2 = ta.ema(e_e1, 5)
+//====================channel======================
+int SMAlength = input.int(defval = 8 , title = "Trend Change SMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = " ", group = "Channel" , confirm = false ) 
+float source = input.source(defval = close, title = "Source", tooltip = "", inline = "", group = "Channel" ) 
+bool bShowBarChannel = input.bool(defval = false , title = "Bar Channel On/Off", tooltip = "", inline =  "", group = "Channel" ,  confirm = false )  
+
+float sma = ta.sma(source = source, length = SMAlength) 
+float last8h = ta.highest( source = source, length = 13)
+float lastl8 = ta.lowest( source = source, length = 13)
+bool bearish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] > source
+bool bullish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] < source
+
+
+plot( bShowBarChannel ? last8h : last8h == nz( last8h[1] ) ? last8h : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level top', offset=0)
+plot( bShowBarChannel ? lastl8 : lastl8 == nz( lastl8[1] ) ? lastl8 : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level bottom', offset=0)
+
+//--------------------trend colour ema------------------------------------------------//    ema trend direction trigger For Singals 1 & 2
+EMAlength = input.int(defval = 13 , title = "Trend Change EMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+ema = ta.ema(source = source, length = EMAlength) 
+plotColor = ema >= ema[2] ? colorLime : ema < ema[2] ? colorRed : na
+plot( ema, title='EMA', style=plot.style_line, linewidth=1, color=color.new( color= plotColor , transp = 0 ) )
+
+
+//--Modified vyacheslav.shindin-------------------------------------------------//           Signal 1
+vh1 = ta.ema( source = ta.highest( source=math.avg( low , source ) , length=fast ), length =fast )
+vl1 = ta.ema( source = ta.lowest( source=math.avg( high , source ) , length=slow ), length =slow )
+e_ema1 = ta.ema( source = source, length=1 )
+e_ema2 = ta.ema( source = e_ema1, length=1 )
+e_ema3 = ta.ema( source = e_ema2, length=1 )
+tema = 1 * ( e_ema1 - e_ema2 ) + e_ema3
+e_e1 = ta.ema( source=source, length=8 )
+e_e2 = ta.ema( source=e_e1, length=5 )
+
 dema = 2 * e_e1 - e_e2
-signal = tema > dema ? math.max(vh1, vl1) : math.min(vh1, vl1)
+signal = tema > dema ? math.max( vh1, vl1 ) : math.min( vh1, vl1 )
 is_call = tema > dema and signal > low and signal - signal[1] > signal[1] - signal[2]
 is_put = tema < dema and signal < high and signal[1] - signal > signal[2] - signal[1]
 
-plotshape(is_call ? 1 : na, title='BUY ARROW', color=color.new(color.green, 0), text='*BUY*', style=shape.arrowup, location=location.belowbar)
-plotshape(is_put ? -1 : na, title='SELL ARROW', color=color.new(color.red, 0), text='*SELL*', style=shape.arrowdown)
-//========================================================================================================
-//Modified - Rajandran R Supertrend----------------------------------------------------- //       Signal 2
-//========================================================================================================
-// indicator("Supertrend", overlay=true, timeframe="", timeframe_gaps=true)
-// 
-// atrPeriod = input(10, "ATR Length")
-// factor = input.float(3.0, "Factor", step = 0.01)
-// 
-// [supertrend, direction] = ta.supertrend(factor, atrPeriod)
-// 
-// bodyMiddle = plot((open + close) / 2, display=display.none)
-// upTrend = plot(direction < 0 ? supertrend : na, "Up Trend", color = color.green, style=plot.style_linebr)
-// downTrend = plot(direction < 0? na : supertrend, "Down Trend", color = color.red, style=plot.style_linebr)
-// 
-// fill(bodyMiddle, upTrend, color.new(color.green, 90), fillgaps=false)
-// fill(bodyMiddle, downTrend, color.new(color.red, 90), fillgaps=false)
-//
-//===============================Directional Projection=======================================//
-tf2 = input('1', title='Trend Projection TF / Mins/D/W')
-M2 = input('ATR')
-P2 = input(13.00)
-W2 = input(1)
-pf2 = ticker.pointfigure(syminfo.tickerid, 'close', M2, P2, W2)
-spfc2 = request.security(pf2, tf2, close)
-channel3 = input(false, title='Connect Projection High/Low')
-p22 = plot(channel3 ? spfc2 : spfc2 == nz(spfc2[1]) ? spfc2 : na, color=color.new(color.blue, 0), linewidth=2, style=plot.style_linebr, title='Directional Projection', offset=0)
-//----------------------------------------------------------------------//
+plotshape( is_call ? 1 : na, title='BUY ARROW', color=color.new( colorGreen, 0 ), text='*BUY*', style=shape.arrowup, location=location.belowbar )
+plotshape( is_put ? -1 : na, title='SELL ARROW', color=color.new( colorRed, 0 ), text='*SELL*', style=shape.arrowdown )
 
+
+//Modified - Rajandran R Supertrend----------------------------------------------------- //       Signal 2
+int iFactor = input.int(defval = 1 , title = "Trend Transition Signal", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+Pd = input.int(defval = 1 , title = "Pd", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+Up = hl2 - iFactor * ta.atr(Pd)
+Dn = hl2 + iFactor * ta.atr(Pd)
+
+// trendUp := close[1] > trendUp[1] ? max( Up,trendUp[1] ) : Up
+// trendDown = close[1] < trendDown[1] ? min( Dn, trendDown[1] ) : Dn
+// trend = close > trendDown[1] ? 1: close< trendUp[1]? -1: nz(trend[1],0)
+// plotarrow(trend == 1 and trend[1] == -1 ? trend : na, title="Up Entry Arrow", colorup=lime, maxheight=1000, minheight=50, transp=85)
+// plotarrow(trend == -1 and trend[1] == 1 ? trend : na, title="Down Entry Arrow", colordown=red, maxheight=1000, minheight=50, transp=85)
+
+// Moddified [RS]Support and Resistance V0
+RSLength = input.int(defval = 21 , title = "Support / Resistance length", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+
+float RSTT = ta.valuewhen( condition= high >= ta.highest( high, RSLength ), source=high, occurrence=0 )
+float RSTB = ta.valuewhen( condition= low <= ta.lowest( low, RSLength), source=low, occurrence=0 )
+
+plot( series= RSTT, color=RSTT != RSTT[1] ? na : color.new( color=colorRed , transp = 0 ), linewidth=1, offset=0 )
+plot( series=RSTB, color=RSTB != RSTB[1] ? na : color.new( color=colorGreen , transp = 0 ), linewidth=1, offset=0 )
+
+
+//===============================Directional Projection=======================================//
+string sTrendProjTimeFame = input.string( defval='1', title='Tgrend Projection TF / Mins/D/W' )
+string sStyle = input.string( defval='ATR', title='Average True Range' )
+
+int P2 = input.int( defval = 13 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+int W2 = input.int( defval = 1 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+
+string pf2 = ticker.pointfigure( syminfo.tickerid, 'close', sStyle, P2, W2 )
+
+spfc2 = request.security( symbol=pf2, timeframe=sTrendProjTimeFame, expression=source )
+bool bShowProjection = input.bool( defval = false , title = "Connect Projection High/Low", tooltip = "", inline =  "", group = "" ,  confirm = false )  
+
+p22 = plot( bShowProjection ? spfc2 : spfc2 == nz( spfc2[1] ) ? spfc2 : na, color=color.new( colorBlue, 0), linewidth=2, style=plot.style_linebr, title='Directional Projection', offset=0)
+//----------------------------------------------------------------------//
