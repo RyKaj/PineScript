@@ -12,9 +12,11 @@
 indicator('Woverine - Support & Resistance', overlay=true, shorttitle='S&R')
 
 
+//-------------------------------------------------------------------------------------------------------------------------
 // Plot colors
 // https://chir.ag/projects/name-that-color/#6195ED
 // https://kodify.net/tradingview/colours/basic-colours/
+//-------------------------------------------------------------------------------------------------------------------------
 color colorRed = #991515
 color colorBlue = #0496ff
 color colorGreen = #459915
