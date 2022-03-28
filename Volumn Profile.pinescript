@@ -17,14 +17,46 @@ indicator(title='Woverine - Volume Profile', shorttitle='VP', overlay=true, prec
 // https://chir.ag/projects/name-that-color/#6195ED
 // https://kodify.net/tradingview/colours/basic-colours/
 //-------------------------------------------------------------------------------------------------------------------------
-// color colorRed = #FF5252
-// color colorBlue = #2196F3
-// color colorGreen = #4CAF50
-// color colorPurple = #9C27B0
-// color colorTeal = #00897B
+// color colorAquaIsland = #B2DFDB
+// color colorAzureRadiance = #0094ff
 // color colorBlack = #363A45
+// color colorBlazeOrange = #ff6a00
+// color colorBlue = #2196F3
+// color colorBlueChill = #088A8D
+// color colorBlushPink = #fd7fe6
+// color colorBurntSienna = #EF5350
+// color colorCandelLight = #FCD917
+// color colorCoral = #FF7F50
+// color colorCyan = #17FFFF
+// color colorDeathCross = #e32636
+// color colorFreshEggplant = #800080
+// color colorFruitSalad = #4CAF50
+// color colorGoldenCross = #61ed77
 color colorGray = #787B86
+// color colorJapaneseLaurel = #008000
+// color colorGreen = #4CAF50
+// color colorJungleGreen = #39ff14
+// color colorKeyLimePie = #BCBB26
+// color colorLilacBush = #9575cd
+// color colorLime = #00E676
 color colorOrange = #FF9800
+// color colorParsley = #0E4813
+// color colorPastelPink = #FFCDD2
+// color colorPurple = #9C27B0
+// color colorRed = #FF5252
+// color colorRobinEggBlue = #00C9C9
+// color colorRoseBudCherry = #880e4f
+// color colorRusticRed = #4E0404
+// color colorSaratoga = #505010
+// color colorSpringGreen = #00E676
+// color colorStarship = #F2F131
+// color colorTamarillo = #991515
+// color colorTeal = #00897B
+// color colorTealBlue = #055355
+// color colorTrendyGreen = #86851b
+// color colorWhite = #FFFFFF
+
+
 
 
 //-------------------------------------------------------------------------------------------------------------------------
