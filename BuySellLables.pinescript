@@ -54,88 +54,437 @@ color colorTeal = #00897B
 // color colorTrendyGreen = #86851b
 // color colorWhite = #FFFFFF
 
+// 
+// 
+// //Configured signal output
+// slow = 8
+// fast = 5
+// 
+// 
+// //
+// //====================channel======================
+// int SMAlength = input.int(defval = 8 , title = "Trend Change SMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = "", group = "Channel" , confirm = false ) 
+// float source = input.source(defval = close, title = "Source", tooltip = "", inline = "", group = "Channel" ) 
+// bool bShowBarChannel = input.bool(defval = false , title = "Bar Channel On/Off", tooltip = "", inline =  "", group = "Channel" ,  confirm = false )  
+// 
+// float sma = ta.sma(source = source, length = SMAlength) 
+// float last8h = ta.highest( source = source, length = 13)
+// float lastl8 = ta.lowest( source = source, length = 13)
+// bool bearish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] > source
+// bool bullish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] < source
+// 
+// 
+// plot( bShowBarChannel ? last8h : last8h == nz( last8h[1] ) ? last8h : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level top', offset=0)
+// plot( bShowBarChannel ? lastl8 : lastl8 == nz( lastl8[1] ) ? lastl8 : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level bottom', offset=0)
+// 
+// //--------------------trend colour ema------------------------------------------------//    ema trend direction trigger For Singals 1 & 2
+// EMAlength = input.int(defval = 13 , title = "Trend Change EMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// ema = ta.ema(source = source, length = EMAlength) 
+// plotColor = ema >= ema[2] ? colorLime : ema < ema[2] ? colorRed : na
+// plot( ema, title='EMA', style=plot.style_line, linewidth=1, color=color.new( color= plotColor , transp = 0 ) )
+// 
+// 
+// //--Modified vyacheslav.shindin-------------------------------------------------//           Signal 1
+// vh1 = ta.ema( source = ta.highest( source=math.avg( low , source ) , length=fast ), length =fast )
+// vl1 = ta.ema( source = ta.lowest( source=math.avg( high , source ) , length=slow ), length =slow )
+// e_ema1 = ta.ema( source = source, length=1 )
+// e_ema2 = ta.ema( source = e_ema1, length=1 )
+// e_ema3 = ta.ema( source = e_ema2, length=1 )
+// tema = 1 * ( e_ema1 - e_ema2 ) + e_ema3
+// e_e1 = ta.ema( source=source, length=8 )
+// e_e2 = ta.ema( source=e_e1, length=5 )
+// 
+// dema = 2 * e_e1 - e_e2
+// signal = tema > dema ? math.max( vh1, vl1 ) : math.min( vh1, vl1 )
+// is_call = tema > dema and signal > low and signal - signal[1] > signal[1] - signal[2]
+// is_put = tema < dema and signal < high and signal[1] - signal > signal[2] - signal[1]
+// 
+// plotshape( is_call ? 1 : na, title='BUY ARROW', color=color.new( colorGreen, 0 ), text='*BUY*', style=shape.arrowup, location=location.belowbar )
+// plotshape( is_put ? -1 : na, title='SELL ARROW', color=color.new( colorRed, 0 ), text='*SELL*', style=shape.arrowdown )
+// 
+// 
+// //Modified - Rajandran R Supertrend----------------------------------------------------- //       Signal 2
+// int iFactor = input.int(defval = 1 , title = "Trend Transition Signal", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// Pd = input.int(defval = 1 , title = "Pd", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// Up = hl2 - iFactor * ta.atr(Pd)
+// Dn = hl2 + iFactor * ta.atr(Pd)
+// 
+// // trendUp := close[1] > trendUp[1] ? max( Up,trendUp[1] ) : Up
+// // trendDown = close[1] < trendDown[1] ? min( Dn, trendDown[1] ) : Dn
+// // trend = close > trendDown[1] ? 1: close< trendUp[1]? -1: nz(trend[1],0)
+// // plotarrow(trend == 1 and trend[1] == -1 ? trend : na, title="Up Entry Arrow", colorup=lime, maxheight=1000, minheight=50, transp=85)
+// // plotarrow(trend == -1 and trend[1] == 1 ? trend : na, title="Down Entry Arrow", colordown=red, maxheight=1000, minheight=50, transp=85)
+// 
+// // Moddified [RS]Support and Resistance V0
+// RSLength = input.int(defval = 21 , title = "Support / Resistance length", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// 
+// float RSTT = ta.valuewhen( condition= high >= ta.highest( high, RSLength ), source=high, occurrence=0 )
+// float RSTB = ta.valuewhen( condition= low <= ta.lowest( low, RSLength), source=low, occurrence=0 )
+// 
+// plot( series= RSTT, color=RSTT != RSTT[1] ? na : color.new( color=colorRed , transp = 0 ), linewidth=1, offset=0 )
+// plot( series=RSTB, color=RSTB != RSTB[1] ? na : color.new( color=colorGreen , transp = 0 ), linewidth=1, offset=0 )
+// 
+// 
+// //===============================Directional Projection=======================================//
+// string sTrendProjTimeFame = input.string( defval='1', title='Tgrend Projection TF / Mins/D/W' )
+// string sStyle = input.string( defval='ATR', title='Average True Range' )
+// 
+// int P2 = input.int( defval = 13 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// int W2 = input.int( defval = 1 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = "", group = "" , confirm = false ) 
+// 
+// string pf2 = ticker.pointfigure( syminfo.tickerid, 'close', sStyle, P2, W2 )
+// 
+// spfc2 = request.security( symbol=pf2, timeframe=sTrendProjTimeFame, expression=source )
+// bool bShowProjection = input.bool( defval = false , title = "Connect Projection High/Low", tooltip = "", inline =  "", group = "" ,  confirm = false )  
+// 
+// p22 = plot( bShowProjection ? spfc2 : spfc2 == nz( spfc2[1] ) ? spfc2 : na, color=color.new( colorBlue, 0), linewidth=2, style=plot.style_linebr, title='Directional Projection', offset=0)
+// //----------------------------------------------------------------------//
+// 
+// 
 
 
-//Configured signal output
-slow = 8
-fast = 5
 
 
-//
-//====================channel======================
-int SMAlength = input.int(defval = 8 , title = "Trend Change SMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = " ", group = "Channel" , confirm = false ) 
-float source = input.source(defval = close, title = "Source", tooltip = "", inline = "", group = "Channel" ) 
-bool bShowBarChannel = input.bool(defval = false , title = "Bar Channel On/Off", tooltip = "", inline =  "", group = "Channel" ,  confirm = false )  
+//********** Functions
+funcDonchian(_len) =>
+    math.avg(ta.lowest(_len), ta.highest(_len))
 
-float sma = ta.sma(source = source, length = SMAlength) 
-float last8h = ta.highest( source = source, length = 13)
-float lastl8 = ta.lowest( source = source, length = 13)
-bool bearish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] > source
-bool bullish = ta.cross( source1 = source, source2 = sma) == 1 and source[1] < source
+funcEmaSma(_src, _period, _strategy) =>
+    tresholdPositive = 88
+    tresholdNegative = -88
+
+    // EMA/SMA
+    maLengthBuy_1_Default = 14
+    maLengthBuy_2_Default = 3
+    maLengthSell_1_Default = 8
+    maLengthSell_2_Default = 1
+
+    // setting 1
+    maLengthBuy_1 = _period == '1' ? 6 : _period == '3' ? 5 : _period == '5' ? 5 : _period == '15' ? 42 : _period == '30' ? 42 : _period == '45' ? 16 : _period == '60' ? 20 : timeframe.isdaily ? 14 : timeframe.isweekly ? 14 : timeframe.ismonthly ? 5 : 14
+    maLengthBuy_2 = _period == '1' ? 1 : _period == '3' ? 1 : _period == '5' ? 1 : _period == '15' ? 1 : _period == '30' ? 1 : _period == '45' ? 1 : _period == '60' ? 2 : timeframe.isdaily ? 5 : timeframe.isweekly ? 3 : timeframe.ismonthly ? 1 : 3
+    maLengthSell_1 = _period == '1' ? 6 : _period == '3' ? 3 : _period == '5' ? 3 : _period == '15' ? 6 : _period == '30' ? 6 : _period == '45' ? 8 : _period == '60' ? 20 : timeframe.isdaily ? 12 : timeframe.isweekly ? 8 : timeframe.ismonthly ? 5 : 8
+    maLengthSell_2 = _period == '1' ? 3 : _period == '3' ? 1 : _period == '5' ? 2 : _period == '15' ? 2 : _period == '30' ? 1 : _period == '45' ? 1 : _period == '60' ? 1 : timeframe.isdaily ? 1 : timeframe.isweekly ? 1 : timeframe.ismonthly ? 1 : 1
+
+    // setting 2
+    isTimeframeBased = _strategy == 'EMA/SMA TF based'
+    maLengthBuyFinal_1 = isTimeframeBased ? maLengthBuy_1 : maLengthBuy_1_Default
+    maLengthBuyFinal_2 = isTimeframeBased ? maLengthBuy_2 : maLengthBuy_2_Default
+    maLengthSellFinal_1 = isTimeframeBased ? maLengthSell_1 : maLengthSell_1_Default
+    maLengthSellFinal_2 = isTimeframeBased ? maLengthSell_2 : maLengthSell_2_Default
+
+    // BUY
+    esaBuy = ta.ema(_src, maLengthBuyFinal_1)
+    sourceEmaBuy = ta.ema(math.abs(_src - esaBuy), maLengthBuyFinal_1)
+    ciBuy = (_src - esaBuy) / (0.015 * sourceEmaBuy)
+    trendEmaBuy = ta.ema(ciBuy, maLengthBuyFinal_2)
+    trendSmaBuy = ta.sma(trendEmaBuy, 4)
+
+    // SELL
+    esaSell = ta.ema(_src, maLengthSellFinal_1)
+    sourceEmaSell = ta.ema(math.abs(_src - esaSell), maLengthSellFinal_1)
+    ciSell = (_src - esaSell) / (0.015 * sourceEmaSell)
+    trendEmaSell = ta.ema(ciSell, maLengthSellFinal_2)
+    trendSmaSell = ta.sma(trendEmaSell, 4)
+
+    // prepare signals
+    buyEmaSma = ta.crossover(trendEmaBuy, trendSmaBuy) and trendEmaBuy <= tresholdNegative
+    sellEmaSma = ta.crossunder(trendEmaSell, trendSmaSell) and trendEmaSell >= tresholdPositive
+
+    [buyEmaSma, sellEmaSma]
+
+// Percentage Price Oscillator
+funcPPO(_src) =>
+    valPPOfast = 12
+    valPPOslow = 26
+    valPPOsmooth = 2
+    valPPOfastMA = ta.ema(_src, valPPOfast)
+    valPPOslowMA = ta.ema(_src, valPPOslow)
+    valPPOmacd = valPPOfastMA - valPPOslowMA
+    valPPOmacd2 = valPPOmacd / valPPOslowMA * 100
+    valPPOresult = ta.sma(valPPOmacd2, valPPOsmooth)
+    valPPOoscMin = valPPOresult > valPPOresult[1] and valPPOresult[1] < valPPOresult[2]
+    valPPOoscMax = valPPOresult < valPPOresult[1] and valPPOresult[1] > valPPOresult[2]
+    valPPOdivergenceBull = valPPOoscMin ? valPPOresult[1] : na
+    valPPOdivergenceBear = valPPOoscMax ? valPPOresult[1] : na
+
+    // prepare signals
+    buyPPO = valPPOdivergenceBull != 0
+    sellPPO = valPPOdivergenceBear != 0
+
+    [buyPPO, sellPPO]
+
+// Kaufman's Adaptive Moving Average (KAMA)
+funcKAMA(_src) =>
+    // settings
+    valKamaFastLength = 12
+    valKamaFastLengthKAMA = 2
+    valKamaSlowLength = 26
+    valKamaSlowLengthKAMA = 30
+    valKamaSignalLength = 9
+
+    // fast
+    valKamaFastLag = (valKamaFastLength - 1) / 2
+    valKamaFastData = _src + _src - _src[valKamaFastLag]
+    valKamaFastZeroLagEMA = ta.ema(valKamaFastData, valKamaFastLength)
+    valKamaFastEma = ta.ema(_src, valKamaFastLength)
+    valKamaFastVolatility = math.sum(math.abs(_src - _src[1]), valKamaFastLength)
+    valKamaFastEfficiencyRatio = valKamaFastVolatility != 0 ? math.abs(_src - _src[valKamaFastLength]) / valKamaFastVolatility : 0
+    valKamaFast = 0.0
+    valKamaFast := nz(valKamaFast[1]) + math.pow(valKamaFastEfficiencyRatio * (2 / (valKamaFastLengthKAMA + 1) - 2 / (valKamaSlowLengthKAMA + 1)) + 2 / (valKamaSlowLengthKAMA + 1), 2) * (_src - nz(valKamaFast[1]))
+
+    // slow
+    valKamaSlowLag = (valKamaSlowLength - 1) / 2
+    valKamaSlowData = _src + _src - _src[valKamaSlowLag]
+    valKamaSlowZeroLagEMA = ta.ema(valKamaSlowData, valKamaSlowLength)
+    valKamaSlowEma = ta.ema(_src, valKamaSlowLength)
+    valKamaSlowVolatility = math.sum(math.abs(_src - _src[1]), valKamaSlowLength)
+    valKamaSlowEfficiencyRatio = valKamaSlowVolatility != 0 ? math.abs(_src - _src[valKamaSlowLength]) / valKamaSlowVolatility : 0
+    valKamaSlow = 0.0
+    valKamaSlow := nz(valKamaSlow[1]) + math.pow(valKamaSlowEfficiencyRatio * (2 / (valKamaFastLengthKAMA + 1) - 2 / (valKamaSlowLengthKAMA + 1)) + 2 / (valKamaSlowLengthKAMA + 1), 2) * (_src - nz(valKamaSlow[1]))
+
+    // Moving Average Convergence Divergence (MACD)
+    valKamaMacd1 = valKamaFastZeroLagEMA - valKamaSlowZeroLagEMA
+    valKamaMacd2 = valKamaFastEma - valKamaSlowEma
+    valKamaMacd3 = valKamaFast - valKamaSlow
+    valKamaMacdAverage = (valKamaMacd1 + valKamaMacd2 + valKamaMacd3) / 3
+
+    // prepare signals
+    valKamaSignal = ta.ema(valKamaMacdAverage, valKamaSignalLength)
+    //valKamaSignal = ema(valKamaMacdAverage + (valKamaMacdAverage - valKamaMacdAverage[(valKamaSignalLength - 1) / 2]), valKamaSignalLength)
+
+    // prepare signals
+    buyKama = ta.crossover(valKamaMacdAverage, valKamaSignal)
+    sellKama = ta.crossunder(valKamaMacdAverage, valKamaSignal)
+
+    [buyKama, sellKama]
+
+funcIchimoku(_period, _src) =>
+    conversionLinePeriod = _period == 'Ichimoku_9-26-52' ? 9 : _period == 'Ichimoku_10-30-60' ? 10 : _period == 'Ichimoku_20-60-120' ? 20 : 9
+    baseLinePeriod = _period == 'Ichimoku_9-26-52' ? 26 : _period == 'Ichimoku_10-30-60' ? 30 : _period == 'Ichimoku_20-60-120' ? 60 : 26
+    laggingSpanPeriod = _period == 'Ichimoku_9-26-52' ? 52 : _period == 'Ichimoku_10-30-60' ? 60 : _period == 'Ichimoku_20-60-120' ? 120 : 52
+
+    // calc
+    tenkanSenConversionLine = funcDonchian(conversionLinePeriod)
+    kijunSenBaseLine = funcDonchian(baseLinePeriod)
+    leadingSpanA = math.avg(tenkanSenConversionLine, kijunSenBaseLine)
+    leadingSpanB = funcDonchian(laggingSpanPeriod)
+
+    // RSI Settings
+    ichiRsiLength = 14
+    ichiRsiOverBought = 50
+    ichiRsiOverSold = 100
+    ichiRsiDefault = ta.rsi(_src, ichiRsiLength)
+
+    // lines, span
+    tenkanSenLine = tenkanSenConversionLine[baseLinePeriod]
+    kijunSenLine = kijunSenBaseLine[baseLinePeriod]
+    senkouSpanA = leadingSpanA[baseLinePeriod * 2]
+    senkouSpanB = leadingSpanB[baseLinePeriod * 2]
+    chikuSpan = _src[0]
+
+    // smallest/greatest of multiple given values
+    ichiMin = math.min(senkouSpanA, senkouSpanB)
+    ichiMax = math.max(senkouSpanA, senkouSpanB)
+
+    // up/down
+    upTrend = chikuSpan > ichiMax
+    downTrend = chikuSpan < ichiMin
+
+    // bull/bear
+    bull = ta.crossover(tenkanSenLine, kijunSenLine)
+    bear = ta.crossunder(tenkanSenLine, kijunSenLine)
+
+    // prepare signals
+    longIchi = bull and upTrend and ichiRsiDefault <= ichiRsiOverSold
+    shortIchi = bear and downTrend and ichiRsiDefault >= ichiRsiOverBought
+
+    [longIchi, shortIchi]
+
+funcDirectionalMovement(_len) =>
+    _up = ta.change(high)
+    _down = -ta.change(low)
+    _plusDM = na(_up) ? na : _up > _down and _up > 0 ? _up : 0
+    _minusDM = na(_down) ? na : _down > _up and _down > 0 ? _down : 0
+    _trueRange = ta.rma(ta.tr, _len)
+    _plus = fixnan(100 * ta.rma(_plusDM, _len) / _trueRange)
+    _minus = fixnan(100 * ta.rma(_minusDM, _len) / _trueRange)
+    [_plus, _minus]
+
+funcAdx(valAdxDirectionalIndexLength, _len) =>
+    [_plus, _minus] = funcDirectionalMovement(valAdxDirectionalIndexLength)
+    sum = _plus + _minus
+    funcAdx = 100 * ta.rma(math.abs(_plus - _minus) / (sum == 0 ? 1 : sum), _len)
+    funcAdx
+
+funcAdxLowHigh(_len, _type) =>
+    [_plus, _minus] = funcDirectionalMovement(_len)
+    return_1 = _type == 'high' ? _plus : _minus
+    return_1
+
+funcHullMovingAverage(_src, _len) =>
+    tmpVal = math.max(2, _len)
+    return_2 = ta.wma(2 * ta.wma(_src, tmpVal / 2) - ta.wma(_src, tmpVal), math.round(math.sqrt(tmpVal)))
+    return_2
+
+funcHullMovingAverage3(_src, _len) =>
+    tmpVal = _len / 2
+    ta.wma(ta.wma(_src, tmpVal / 3) * 3 - ta.wma(_src, tmpVal / 2) - ta.wma(_src, tmpVal), tmpVal)
+
+funcHullTrend(_src, _period) =>
+    valHullTrendLength = _period == '1' ? 30 : _period == '3' ? 29 : _period == '5' ? 28 : _period == '15' ? 27 : _period == '30' ? 26 : _period == '45' ? 24 : _period == '60' ? 24 : timeframe.isdaily ? 24 : timeframe.isweekly ? 24 : timeframe.ismonthly ? 24 : 24
+    boolHullTrendA = funcHullMovingAverage(_src, valHullTrendLength)
+    boolHullTrendB = funcHullMovingAverage3(_src, valHullTrendLength)
+    buyHullTrend = boolHullTrendB > boolHullTrendA and boolHullTrendB[1] < boolHullTrendA[1]
+    sellHullTrend = boolHullTrendA > boolHullTrendB and boolHullTrendA[1] < boolHullTrendB[1]
+    [buyHullTrend, sellHullTrend]
+
+funcFractalCalculated(_type, _variant) =>
+    _regular = _variant == 1 ? high[4] < high[3] and high[3] < high[2] and high[2] > high[1] and high[1] > high[0] : _variant == -1 ? low[4] > low[3] and low[3] > low[2] and low[2] < low[1] and low[1] < low[0] : false
+    _billWilliams = _variant == 1 ? high[4] < high[2] and high[3] < high[2] and high[2] > high[1] and high[2] > high[0] : _variant == -1 ? low[4] > low[2] and low[3] > low[2] and low[2] < low[1] and low[2] < low[0] : false
+    return_3 = _type == 'Fractal Regular' ? _regular : _billWilliams
+    return_3
 
 
-plot( bShowBarChannel ? last8h : last8h == nz( last8h[1] ) ? last8h : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level top', offset=0)
-plot( bShowBarChannel ? lastl8 : lastl8 == nz( lastl8[1] ) ? lastl8 : na, color=color.new( colorBlack, 0), linewidth=1, style=plot.style_linebr, title='Candle body resistance level bottom', offset=0)
 
-//--------------------trend colour ema------------------------------------------------//    ema trend direction trigger For Singals 1 & 2
-EMAlength = input.int(defval = 13 , title = "Trend Change EMA", minval = 1  , maxval =  1 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
-ema = ta.ema(source = source, length = EMAlength) 
-plotColor = ema >= ema[2] ? colorLime : ema < ema[2] ? colorRed : na
-plot( ema, title='EMA', style=plot.style_line, linewidth=1, color=color.new( color= plotColor , transp = 0 ) )
+//********** Inputs
 
-
-//--Modified vyacheslav.shindin-------------------------------------------------//           Signal 1
-vh1 = ta.ema( source = ta.highest( source=math.avg( low , source ) , length=fast ), length =fast )
-vl1 = ta.ema( source = ta.lowest( source=math.avg( high , source ) , length=slow ), length =slow )
-e_ema1 = ta.ema( source = source, length=1 )
-e_ema2 = ta.ema( source = e_ema1, length=1 )
-e_ema3 = ta.ema( source = e_ema2, length=1 )
-tema = 1 * ( e_ema1 - e_ema2 ) + e_ema3
-e_e1 = ta.ema( source=source, length=8 )
-e_e2 = ta.ema( source=e_e1, length=5 )
-
-dema = 2 * e_e1 - e_e2
-signal = tema > dema ? math.max( vh1, vl1 ) : math.min( vh1, vl1 )
-is_call = tema > dema and signal > low and signal - signal[1] > signal[1] - signal[2]
-is_put = tema < dema and signal < high and signal[1] - signal > signal[2] - signal[1]
-
-plotshape( is_call ? 1 : na, title='BUY ARROW', color=color.new( colorGreen, 0 ), text='*BUY*', style=shape.arrowup, location=location.belowbar )
-plotshape( is_put ? -1 : na, title='SELL ARROW', color=color.new( colorRed, 0 ), text='*SELL*', style=shape.arrowdown )
+// The HLC stands for High, Low, Close and the /3 divides the result by 3 to give you the average.
+float inputSource = input.source( defval = close, title = "Calculation Source", tooltip = "", inline = "", group = "", confirm = false ) 
+string inputStrategy = input.string( defval = "EMA/SMA", title = "Strategy", options = ['EMA/SMA', 'EMA/SMA TF based', 'Fractal Regular', 'Fractal Bill Williams', 'Percentage Price Oscillator', 'Hull Trend', 'Kaufman Adaptive Moving Average'], tooltip = "", inline = "", group = "" , confirm = false ) 
+string inputStrategyLongShort = input.string( defval='ADX', title='Strategy - Long/Short', options=['DISABLED', 'ADX', 'Ichimoku_9-26-52', 'Ichimoku_10-30-60', 'Ichimoku_20-60-120'] , tooltip = "", inline = "", group = "" , confirm = false )
+string inputStyleLabelSize = input.string( defval='small',  title='Label - Size', options=['auto', 'huge', 'large', 'normal', 'small', 'tiny'], tooltip = "", inline = "", group = "" , confirm = false )
+string inputStyleLabelType = input.string( defval='label', title='Label - Type', options=['label', 'triangle'], tooltip = "", inline = "", group = "" , confirm = false )
+string inputStyleLabelPosition = input.string( defval='default', title='Label - Position',  options=['default', 'lowhigh'], tooltip = "", inline = "", group = "" , confirm = false )
+bool inputShowPriceOnLabel = input.bool(defval = true , title = "Show Price on Labels", tooltip = "", inline = "", group =  "" ,  confirm = fase ) 
+bool inputShowBuyLabel = input.bool(defval = true , title = "Show BUY Signal", tooltip = "", inline = "", group =  "" ,  confirm = fase ) 
+bool inputShowSellLabel = input.bool(defval = true , title = "Show SELL Signal", tooltip = "", inline = "", group =  "" ,  confirm = fase ) 
+bool inputActivateAlerts = input.bool(defval = false , title = "Activate Alerts", tooltip = "", inline = "", group =  "" ,  confirm = fase ) 
 
 
-//Modified - Rajandran R Supertrend----------------------------------------------------- //       Signal 2
-int iFactor = input.int(defval = 1 , title = "Trend Transition Signal", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
-Pd = input.int(defval = 1 , title = "Pd", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
-Up = hl2 - iFactor * ta.atr(Pd)
-Dn = hl2 + iFactor * ta.atr(Pd)
-
-// trendUp := close[1] > trendUp[1] ? max( Up,trendUp[1] ) : Up
-// trendDown = close[1] < trendDown[1] ? min( Dn, trendDown[1] ) : Dn
-// trend = close > trendDown[1] ? 1: close< trendUp[1]? -1: nz(trend[1],0)
-// plotarrow(trend == 1 and trend[1] == -1 ? trend : na, title="Up Entry Arrow", colorup=lime, maxheight=1000, minheight=50, transp=85)
-// plotarrow(trend == -1 and trend[1] == 1 ? trend : na, title="Down Entry Arrow", colordown=red, maxheight=1000, minheight=50, transp=85)
-
-// Moddified [RS]Support and Resistance V0
-RSLength = input.int(defval = 21 , title = "Support / Resistance length", minval = 1  , maxval = 800 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
-
-float RSTT = ta.valuewhen( condition= high >= ta.highest( high, RSLength ), source=high, occurrence=0 )
-float RSTB = ta.valuewhen( condition= low <= ta.lowest( low, RSLength), source=low, occurrence=0 )
-
-plot( series= RSTT, color=RSTT != RSTT[1] ? na : color.new( color=colorRed , transp = 0 ), linewidth=1, offset=0 )
-plot( series=RSTB, color=RSTB != RSTB[1] ? na : color.new( color=colorGreen , transp = 0 ), linewidth=1, offset=0 )
+//********** globals
+int valXPosTimeBased = time  //offset -1
+string valCurrentTimeFramePeriod = timeframe.period
+string valPrice = close <= 0.99999 ? str.tostring( close, '#.####' ) : close <= 99.99 ? str.tostring( close, '#.###' ) : close <= 999.99 ? str.tostring( close, '#.##' ) : str.tostring( close, '#' )
+string valLabelTextBuy = 'BUY' + ( inputShowPriceOnLabel == true ? ': ' + valPrice : '' )
+string valLabelTextSell = 'SELL' + ( inputShowPriceOnLabel == true ? ': ' + valPrice : '' )
 
 
-//===============================Directional Projection=======================================//
-string sTrendProjTimeFame = input.string( defval='1', title='Tgrend Projection TF / Mins/D/W' )
-string sStyle = input.string( defval='ATR', title='Average True Range' )
 
-int P2 = input.int( defval = 13 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
-int W2 = input.int( defval = 1 , title = "", minval = 1  , maxval =  20 , step = 1, tooltip = "", inline = " ", group = "" , confirm = false ) 
+//********** Average Directional Index (ADX)
+int valAdxLength = 13
+int valAdxDirectionalIndexLength = 14
+int valAdxAverageTrueRange = 20
+int valAdxHigherLowTrend = 40
 
-string pf2 = ticker.pointfigure( syminfo.tickerid, 'close', sStyle, P2, W2 )
+boolAdxDirectionalIndexHigh = funcAdxLowHigh(valAdxDirectionalIndexLength, 'high')
+boolAdxDirectionalIndexLow = funcAdxLowHigh(valAdxDirectionalIndexLength, 'low')
+boolAdxDirectionalIndexCross = ta.cross(boolAdxDirectionalIndexHigh, boolAdxDirectionalIndexLow)
 
-spfc2 = request.security( symbol=pf2, timeframe=sTrendProjTimeFame, expression=source )
-bool bShowProjection = input.bool( defval = false , title = "Connect Projection High/Low", tooltip = "", inline =  "", group = "" ,  confirm = false )  
+funcAdxUp() =>
+    funcAdx(valAdxDirectionalIndexLength, valAdxLength) >= valAdxAverageTrueRange
 
-p22 = plot( bShowProjection ? spfc2 : spfc2 == nz( spfc2[1] ) ? spfc2 : na, color=color.new( colorBlue, 0), linewidth=2, style=plot.style_linebr, title='Directional Projection', offset=0)
-//----------------------------------------------------------------------//
+funcAdxDirectionalIndexUp() =>
+    boolAdxDirectionalIndexHigh >= boolAdxDirectionalIndexLow    
+funcAdxDirectionalIndexUps() =>
+    boolAdxDirectionalIndexHigh >= valAdxHigherLowTrend
+funcAdxDirectionalIndexDown() =>
+    boolAdxDirectionalIndexLow > boolAdxDirectionalIndexHigh
+funcAdxDirectionalIndexDowns() =>
+    boolAdxDirectionalIndexLow > valAdxHigherLowTrend
+
+funcAdxFinal() =>
+    // bool
+    boolAdxBuyCondition = funcAdxUp() and funcAdxDirectionalIndexUp() and funcAdxDirectionalIndexUps()
+    boolAdxBuyCloseCondition = boolAdxDirectionalIndexCross and funcAdxDirectionalIndexUp()[1]
+    boolAdxSellCondition = funcAdxUp() and funcAdxDirectionalIndexDown() and funcAdxDirectionalIndexDowns()
+    boolAdxSellCloseCondition = boolAdxDirectionalIndexCross and funcAdxDirectionalIndexDown()[1]
+    // counter
+    adxCounter = 0
+    adxCounter := boolAdxBuyCloseCondition ? 0 : boolAdxSellCloseCondition ? 0 : boolAdxBuyCondition ? 1 : boolAdxSellCondition ? -1 : nz(adxCounter[1])
+    // prepare signals
+    longAdx = adxCounter == 1 and adxCounter[1] == 0
+    shortAdx = adxCounter == -1 and adxCounter[1] == 0
+    [longAdx, shortAdx]
+
+
+
+//********** Styling Labels
+string valFinalLabelSize = inputStyleLabelSize == 'auto' ? size.auto : inputStyleLabelSize == 'huge' ? size.huge : inputStyleLabelSize == 'large' ? size.large : inputStyleLabelSize == 'normal' ? size.normal : inputStyleLabelSize == 'small' ? size.small : inputStyleLabelSize == 'tiny' ? size.tiny : size.normal
+string valFinalLabelStyleUp = inputStyleLabelType == 'label' ? label.style_label_up : inputStyleLabelType == 'triangle' ? label.style_triangleup : label.style_label_up
+string valFinalLabelStyleDown = inputStyleLabelType == 'label' ? label.style_label_down : inputStyleLabelType == 'triangle' ? label.style_triangledown : label.style_label_down
+
+
+
+//********** Set Signals - Buy/Sell
+[signalFinalBuy, signalFinalSell] = funcEmaSma(inputSource, valCurrentTimeFramePeriod, inputStrategy)
+
+if inputStrategy == 'Kaufman Adaptive Moving Average'
+    [buyKama, sellKama] = funcKAMA(inputSource)
+    signalFinalBuy := buyKama
+    signalFinalSell := sellKama
+    signalFinalSell
+else if inputStrategy == 'Percentage Price Oscillator'
+    [buyPPO, sellPPO] = funcPPO(inputSource)
+    signalFinalBuy := buyPPO
+    signalFinalSell := sellPPO
+    signalFinalSell
+else if inputStrategy == 'Hull Trend'
+    [buyHullTrend, sellHullTrend] = funcHullTrend(inputSource, valCurrentTimeFramePeriod)
+    signalFinalBuy := buyHullTrend
+    signalFinalSell := sellHullTrend
+    signalFinalSell
+else if inputStrategy == 'Fractal Regular' or inputStrategy == 'Fractal Bill Williams'
+    signalBuyFractal = funcFractalCalculated(inputStrategy, -1)
+    signalSellFractal = funcFractalCalculated(inputStrategy, 1)
+    signalFinalBuy := signalBuyFractal
+    signalFinalSell := signalSellFractal
+    signalFinalSell
+
+
+
+//********** Set Signals - Long/Short
+bool signalFinalLong = false
+bool signalFinalShort = false
+
+if inputStrategyLongShort == 'Ichimoku_9-26-52' or inputStrategyLongShort == 'Ichimoku_10-30-60' or inputStrategyLongShort == 'Ichimoku_20-60-120'
+    [signalLongIchi, signalShortIchi] = funcIchimoku(inputStrategyLongShort, inputSource)
+    signalFinalLong := signalLongIchi
+    signalFinalShort := signalShortIchi
+    signalFinalShort
+else if inputStrategyLongShort == 'ADX'
+    [longAdx, shortAdx] = funcAdxFinal()
+    signalFinalLong := longAdx
+    signalFinalShort := shortAdx
+    signalFinalShort
+
+
+
+//************  Plotting
+
+// BUY
+label.new( x=signalFinalBuy and inputShowBuyLabel == true ? valXPosTimeBased : na, y=inputStyleLabelPosition == 'default' ? na : low, xloc=xloc.bar_time, yloc=inputStyleLabelPosition == 'default' ? yloc.belowbar : yloc.price, text=valLabelTextBuy, color=color.green, textcolor=color.white, style=valFinalLabelStyleUp, size=valFinalLabelSize )
+
+// SELL
+label.new( x=signalFinalSell and inputShowSellLabel == true ? valXPosTimeBased : na, y=inputStyleLabelPosition == 'default' ? na : high, xloc=xloc.bar_time, yloc=inputStyleLabelPosition == 'default' ? yloc.abovebar : yloc.price, text=valLabelTextSell, color=color.red, textcolor=color.white, style=valFinalLabelStyleDown, size=valFinalLabelSize )
+
+// LONG
+label.new( x=signalFinalLong ? valXPosTimeBased : na, y=low, xloc=xloc.bar_time, yloc=yloc.price, text='LONG', color=color.blue, textcolor=color.white, style=valFinalLabelStyleUp, size=size.tiny )
+
+// SHORT
+label.new( x=signalFinalShort ? valXPosTimeBased : na, y=high, xloc=xloc.bar_time, yloc=yloc.price, text='SHORT', color=color.fuchsia, textcolor=color.white, style=valFinalLabelStyleDown, size=size.tiny )
+
+
+//************  Alerting
+
+// BUY
+alertcondition( inputActivateAlerts and signalFinalBuy, title='BUY', message='BUY' )
+
+// SELL
+alertcondition( inputActivateAlerts and signalFinalSell, title='SELL', message='SELL' )
+
+// LONG
+alertcondition( inputActivateAlerts and signalFinalLong, title='LONG', message='LONG' )
+
+// SHORT
+alertcondition( inputActivateAlerts and signalFinalShort, title='SHORT', message='SHORT' )
+

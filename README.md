@@ -28,7 +28,11 @@ Created custom scripts to have more options or have multiple indicator applied a
 <a  name="bsl"  />
 
 ### Buy Sell Labels
-
+- Ability to Change ranges
+- Ability to configure colour schematics
+- Ability to configure style<br />
+<kbd>![](image/BSInput.PNG)</kbd><br />
+<kbd>![](image/BSStyle.PNG)</kbd><br />
   
 
 <a  name="ic"  />
@@ -62,7 +66,6 @@ Created custom scripts to have more options or have multiple indicator applied a
 <a  name="vp"  />
 
 ### Volume Profile
-- Ability to toggle different Support, Resistance, Directional Projection & Trend. 
-- Ability to configure colour schematics.<br />
+- Ability to configure colour schematics and other properties.<br />
 <kbd>![](image/VPInput.PNG)</kbd><br />
 <kbd>![](image/VPStyle.PNG)</kbd><br />
