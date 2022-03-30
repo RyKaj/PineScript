@@ -15,6 +15,8 @@ Created custom scripts to have more options or have multiple indicator applied a
 
 - [Buy Sell Labels](#bsl)
 
+- [CandleStick Patterns](#csp)
+
 - [Ichimou & Cloud](#ic)
 
 - [Moving Average](#ma)
@@ -24,7 +26,6 @@ Created custom scripts to have more options or have multiple indicator applied a
 - [Volume Profile](#vp)
 
   
-
 <a  name="bsl"  />
 
 ### Buy Sell Labels
@@ -33,6 +34,18 @@ Created custom scripts to have more options or have multiple indicator applied a
 - Ability to configure style<br />
 <kbd>![](image/BSInput.PNG)</kbd><br />
 <kbd>![](image/BSStyle.PNG)</kbd><br />
+  
+<a  name="csp"  />
+
+### Candlestick Patterns
+- Ability to change filter on trend patterns.
+- Toggle the differnet patterns
+- Ability to Change ranges
+- Ability to configure colour schematics
+<kbd>![](image/CSInput1.PNG)</kbd><br />
+<kbd>![](image/CSInput2.PNG)</kbd><br />
+<kbd>![](image/CSInput3.PNG)</kbd><br />
+<kbd>![](image/CSStyle.PNG)</kbd><br />
   
 
 <a  name="ic"  />
