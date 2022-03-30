@@ -41,7 +41,7 @@ Created custom scripts to have more options or have multiple indicator applied a
 - Ability to change filter on trend patterns.
 - Toggle the differnet patterns
 - Ability to Change ranges
-- Ability to configure colour schematics
+- Ability to configure colour schematics<br />
 <kbd>![](image/CSInput1.PNG)</kbd><br />
 <kbd>![](image/CSInput2.PNG)</kbd><br />
 <kbd>![](image/CSInput3.PNG)</kbd><br />
