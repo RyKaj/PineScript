@@ -1,4 +1,4 @@
-###### [Home](https://github.com/RyKaj/PineScript/blob/master/README.md) |  |
+###### [Home](https://github.com/RyKaj/PineScript) |  |
 ------------
 
   
