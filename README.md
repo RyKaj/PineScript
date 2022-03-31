@@ -12,19 +12,12 @@ Created custom scripts to have more options or have multiple indicator applied a
   
 
 ## Table of Content
-
 - [Buy Sell Labels](#bsl)
-
 - [CandleStick Patterns](#csp)
-
 - [Ichimou & Cloud](#ic)
-
 - [Moving Average](#ma)
-
 - [Support & Resistance](#sr)
-
 - [Volume Profile](#vp)
-
   
 <a  name="bsl"  />
 
