@@ -1,0 +1,132 @@
+//@version=5
+
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © woverine
+indicator('RSI & PPO', shorttitle='RSIPPO')
+
+
+// Plot colors
+// https://chir.ag/projects/name-that-color/#6195ED
+// https://kodify.net/tradingview/colours/basic-colours/
+// color colorAquaIsland = #B2DFDB
+// color colorAzureRadiance = #0094ff
+// color colorBlack = #363A45
+// color colorBlazeOrange = #ff6a00
+// color colorBlue = #2196F3
+// color colorBlueChill = #088A8D
+// color colorBlushPink = #fd7fe6
+// color colorBurntSienna = #EF5350
+// color colorCandelLight = #FCD917
+// color colorCoral = #FF7F50
+// color colorCyan = #17FFFF
+// color colorDeathCross = #e32636
+// color colorFreshEggplant = #800080
+// color colorFuchsia = #E040FB
+// color colorGoldenCross = #61ed77
+color colorGray = #787B86
+// color colorJapaneseLaurel = #008000
+color colorGreen = #4CAF50
+// color colorJungleGreen = #39ff14
+// color colorKeyLimePie = #BCBB26
+// color colorLilacBush = #9575cd
+// color colorLime = #00E676
+// color colorOrange = #FF9800
+// color colorParsley = #0E4813
+// color colorPastelPink = #FFCDD2
+// color colorPurple = #9C27B0
+color colorRed = #FF5252
+// color colorRobinEggBlue = #00C9C9
+// color colorRoseBudCherry = #880e4f
+// color colorRusticRed = #4E0404
+// color colorSaratoga = #505010
+// color colorSpringGreen = #00E676
+// color colorStarship = #F2F131
+// color colorTamarillo = #991515
+// color colorTeal = #00897B
+// color colorTealBlue = #055355
+// color colorTrendyGreen = #86851b
+// color colorWhite = #FFFFFF
+color colorYellow = #FFEB3B
+
+
+src = input.source( close, "Source" )
+
+// -----------------------------------------------------------
+// Indicator: Relative Strength Index (RSI)
+// -----------------------------------------------------------
+ma( source, length, type ) =>
+    switch type
+        "SMA" => ta.sma( source, length )
+        "Bollinger Bands" => ta.sma( source, length )
+        "EMA" => ta.ema( source, length )
+        "SMMA (RMA)" => ta.rma( source, length )
+        "WMA" => ta.wma( source, length )
+        "VWMA" => ta.vwma( source, length )
+
+rsiLengthInput = input.int( 14, minval=1, title="RSI Length", group="RSI Settings" )
+maTypeInput = input.string( "SMA", title="RSI MA Type", options=["SMA", "Bollinger Bands", "EMA", "SMMA (RMA)", "WMA", "VWMA"], group="RSI Settings" )
+maLengthInput = input.int( 14, title="RSI MA Length", group="RSI Settings" )
+bbMultInput = input.float( 2.0, minval=0.001, maxval=50, title="RSI BB StdDev", group="RSI Settings" )
+
+
+up = ta.rma( math.max( ta.change( src ), 0), rsiLengthInput )
+down = ta.rma( -math.min( ta.change( src ), 0), rsiLengthInput )
+rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down)  )
+rsiMA = ma( rsi, maLengthInput, maTypeInput )
+isBB = maTypeInput == "Bollinger Bands"
+
+rsiPlot = plot( rsi, "RSI", color=#7E57C2 )
+plot( rsiMA, "RSI-based MA", color=colorYellow )
+rsiUpperBand = hline( 70, "RSI Upper Band", color=colorGray )
+midline = hline( 50, "RSI Middle Band", color=color.new( colorGray, 50 ) )
+rsiLowerBand = hline( 30, "RSI Lower Band", color=colorGray )
+fill( rsiUpperBand, rsiLowerBand, color=color.rgb( 126, 87, 194, 90 ), title="RSI Background Fill")
+bbUpperBand = plot( isBB ? rsiMA + ta.stdev( rsi, maLengthInput) * bbMultInput : na, title = "Upper Bollinger Band", color=colorGreen )
+bbLowerBand = plot( isBB ? rsiMA - ta.stdev( rsi, maLengthInput) * bbMultInput : na, title = "Lower Bollinger Band", color=colorGreen )
+fill( bbUpperBand, bbLowerBand, color= isBB ? color.new( colorGreen, 90) : na, title="Bollinger Bands Background Fill" )
+
+midLinePlot = plot(50, color = na, editable = false, display = display.none )
+fill( rsiPlot, midLinePlot, 100, 70, top_color = color.new( colorGreen, 0 ), bottom_color = color.new( colorGreen, 100 ),  title = "Overbought Gradient Fill" )
+fill( rsiPlot, midLinePlot, 30,  0,  top_color = color.new( colorRed, 100 ), bottom_color = color.new( colorRed, 0 ),  title = "Oversold Gradient Fill" )
+
+
+
+// -----------------------------------------------------------
+// Indicator: Percentage Price Oscillator (PPO)
+// -----------------------------------------------------------
+fastLength = input( title='Fast Length', defval=12, group="PPO Settings" )
+slowLength = input( title='Slow Length', defval=26, group="PPO Settings" )
+signalLength = input( title='Signal Length', defval=9, group="PPO Settings" )
+showHistogram = input( title='Show Histogram ?', defval=true, group="PPO Settings" )
+highlightCrossovers = input( title='Highlight PPO/Signal Crossovers ?', defval=true, group="PPO Settings" )
+highlightZeroCrossovers = input( title='Highlight Zero Line Crossovers ?', defval=false, group="PPO Settings" )
+applyFilling = input( title='Apply Ribbon Filling ?', defval=false, group="PPO Settings" )
+
+ppo = 100 * ( ta.ema( src, fastLength ) - ta.ema( src, slowLength ) ) / ta.ema( src, slowLength )
+signal = ta.ema( ppo, signalLength )
+
+hist = ppo - signal
+histColor = hist >= 0 ? hist[1] < hist ? #26A69A : #B2DFDB : hist[1] < hist ? #FFCDD2 : #EF5350
+
+plot( showHistogram ? hist : na, title='Histogram', style=plot.style_columns, color=histColor, transp=0 )
+hline( 0, title='Zero Line', linestyle=hline.style_dotted )
+
+trendColor = ppo > signal ? #0ebb23 : colorRed
+
+ppoColor = applyFilling ? trendColor : #0094ff
+signalColor = applyFilling ? trendColor : #ff6a00
+
+ppoPlot = plot( ppo, title='PPO', color=ppoColor, transp=0 )
+signalPlot = plot( signal, title='Signal', color=signalColor, transp=0 )
+
+transparent = color.new( color.white, 100 )
+
+fillColor = applyFilling ? trendColor : transparent
+fill( ppoPlot, signalPlot, color=fillColor, transp=70 )
+
+zeroCrossBgColor = highlightZeroCrossovers ? ppo > 0 ? colorGreen : colorRed : transparent
+bgcolor( zeroCrossBgColor , transp=90 )
+
+plotshape( highlightCrossovers and ta.crossover( ppo, signal ) ? ppo : na, title='Crossover', location=location.absolute, style=shape.circle, size=size.tiny, color=color.new( colorGreen, 0 ) )
+plotshape( highlightCrossovers and ta.crossunder( ppo, signal ) ? ppo : na, title='Crossunder', location=location.absolute, style=shape.circle, size=size.tiny, color=color.new( colorRed, 0 ) )
+
