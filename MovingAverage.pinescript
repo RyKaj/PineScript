@@ -34,16 +34,12 @@ color colorCoral = #FF7F50
 // color colorCyan = #17FFFF
 color colorDeathCross = #e32636
 // color colorFreshEggplant = #800080
-color colorFruitSalad = #4CAF50
 color colorGoldenCross = #61ed77
-// color colorGoldenCross = #61ed77
 // color colorJapaneseLaurel = #008000
-// color colorGreen = #4CAF50
+color colorGreen = #4CAF50
 color colorJungleGreen = #39ff14
 // color colorKeyLimePie = #BCBB26
 color colorLilacBush = #9575cd
-// color colorLime = #00E676
-// color colorOrange = #FF9800
 // color colorParsley = #0E4813
 // color colorPastelPink = #FFCDD2
 // color colorPurple = #9C27B0
@@ -83,7 +79,7 @@ float ema200 = ta.ema( close, days200 )
 float ema500 = ta.ema( close, days500 )
 
 
-plot( sma20, color=color.new( colorFruitSalad, transp=0 ), title='SMA(20)' )
+plot( sma20, color=color.new( colorGreen, transp=0 ), title='SMA(20)' )
 plot( sma50, color=color.new( colorYellow, transp=0 ), title='SMA(50)' )
 plot( sma100, color=color.new( colorBlueChill, transp=0 ), title='SMA(100)' )
 plot( sma200, color=color.new( colorRed, transp=0 ), title='SMA(200)' )
