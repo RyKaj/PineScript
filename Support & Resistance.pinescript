@@ -30,7 +30,6 @@ color colorBlue = #2196F3
 // color colorCyan = #17FFFF
 // color colorDeathCross = #e32636
 // color colorFreshEggplant = #800080
-// color colorFruitSalad = #4CAF50
 // color colorGoldenCross = #61ed77
 color colorGreen = #459915
 // // color colorGoldenCross = #61ed77
@@ -43,8 +42,8 @@ color colorGreen = #459915
 // color colorOrange = #FF9800
 // color colorParsley = #0E4813
 // color colorPastelPink = #FFCDD2
-// color colorPurple = #9C27B0
-color colorRed = #FF5252
+color colorPurple = #9C27B0
+// color colorRed = #FF5252
 // color colorRobinEggBlue = #00C9C9
 // color colorRoseBudCherry = #880e4f
 // color colorRusticRed = #4E0404
@@ -65,7 +64,7 @@ int srLength = input( defval=21, title='Support / Resistance Length' )
 float RSTT = ta.valuewhen( high >= ta.highest( high, srLength ), high, 0 )
 float RSTB = ta.valuewhen( low <= ta.lowest( low, srLength ), low, 0 )
 
-plot( series=RSTT, title='Resistance', color=RSTT != RSTT[1] ? na : colorRed, linewidth=1, offset=0 )
+plot( series=RSTT, title='Resistance', color=RSTT != RSTT[1] ? na : colorPurple, linewidth=1, offset=0 )
 plot( series=RSTB, title='Support', color=RSTB != RSTB[1] ? na : colorGreen, linewidth=1, offset=0 )
 
 //--------------------------------------------------------------------------------
